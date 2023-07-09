@@ -28,8 +28,9 @@ export default {
 </script>
 
 <style>
-.container{
+body{
   padding: 0;
   margin: 0;
+  width: 100vw;
 }
 </style>

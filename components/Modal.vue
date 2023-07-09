@@ -1,31 +1,45 @@
 <template>
   <div class="modal">
     <div class="modal-wrap">
-      <p class="text-lg">タスクの追加</p>
-      <form @submit.prevent="handleSubmit">
+      <h3 class="text-lg">タスクの追加</h3>
+      <div>
         <input
-          class="form-control form-control-lg"
+          class="input_contents input_task"
           v-model="form.task"
           type="text"
           name="task"
           placeholder="タスクを入力..."
           required
         /><br />
-        <div class="input_tag">
-          タグ<button @click="createTag($event)">+</button><br />
+        <div class="input_contents input_tag">
+          タグ<button @click="addTag($event)">+</button><br />
         </div>
-        <div v-if="inputTagForm" class="input_tag">
-          <input
+        <div v-if="inputTagForm" class="input_contents input_tag">
+          <select
+            class="select_tag"
+            v-if="selectTag"
             v-model="form.tag"
+            size="4"
+            name="tag"
+            multiple
+          >
+            <option v-for="option in form.tag" :value="option" :key="option">
+              {{ option }}
+            </option>
+          </select><br>
+          <input
             type="text"
+            v-model="newTag"
             name="tag"
             placeholder="新しいタグを入力"
           />
-          <button>作成</button>
+          <button @click="createTag($event)">作成</button>
         </div>
-        <button @click="$emit('closeModal')">キャンセル</button>
-        <button type="submit">追加</button>
-      </form>
+        <div class="input_contents">
+          <button @click="$emit('closeModal')">キャンセル</button>
+          <button @click="handleSubmit">追加</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,17 +66,27 @@ export default {
     return {
       form: {
         task: "",
-        tag: "",
+        tag: [],
         status: this.status,
       },
       inputTagForm: false,
+      selectTag: false,
+      newTag: "", // 新しいタグを保持するデータプロパティ
     };
   },
 
   methods: {
-    createTag($event) {
+    addTag($event) {
       $event.preventDefault();
       this.inputTagForm = true;
+    },
+    createTag($event) {
+      $event.preventDefault();
+      if (this.newTag) {
+        this.form.tag.push(this.newTag);
+        this.newTag = ""; // 新しいタグの入力フィールドをリセット
+        this.selectTag = true;
+      }
     },
     handleSubmit() {
       const formData = {
@@ -71,17 +95,19 @@ export default {
         status: this.status,
       };
       console.log(formData.status);
+      // console.log(this.status.UNSUPPORTED);
+      // console.log(formData.status === "UNSUPPORTED");
       switch (formData.status) {
-        case this.status.UNSUPPORTED:
+        case "UNSUPPORTED":
           this.$emit("addTaskUnsupported", formData);
           break;
-        case this.status.IN_PROGRESS:
+        case "IN_PROGRESS":
           this.$emit("addTaskInProgress", formData);
           break;
-        case this.status.IN_REVIEW:
+        case "IN_REVIEW":
           this.$emit("addTaskInReview", formData);
           break;
-        case this.status.COMPLETED:
+        case "COMPLETED":
           this.$emit("addTaskCompleted", formData);
           break;
         default:
@@ -104,6 +130,7 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   .modal-wrap {
+    padding: 20px;
     position: absolute;
     background-color: white;
     top: 50%;
@@ -111,6 +138,16 @@ export default {
     transform: translate(-50%, -50%);
     height: 40vh;
     width: 50vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .input_contents{
+    margin-bottom: 20px;
+  }
+  .select_tag {
+    width: 150px;
   }
 }
 </style>

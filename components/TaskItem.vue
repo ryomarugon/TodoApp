@@ -1,7 +1,9 @@
 <template>
   <div class="task-item">
     <p>{{ task }}</p>
-    <p>{{ tag }}</p>
+    <ul class="tag-list">
+      タグ：<li v-for="tagItem in tag" :key="tagItem">{{ tagItem }}</li>
+    </ul>
   </div>
 </template>
 
@@ -13,7 +15,7 @@ export default {
       required: true,
     },
     tag: {
-      type: String,
+      type: Array,
       required: true,
     },
   },
@@ -26,4 +28,21 @@ export default {
   padding: 10px;
   margin-bottom: 10px;
 }
+.tag-list {
+  display: flex;
+  /* flex-direction: column; */
+  /* align-content: flex-start; */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+li{
+  background-color:olive ;
+  color: white;
+  margin-right: 5px;
+}
+p,ul{
+  font-size: 14px;
+}
+
 </style>

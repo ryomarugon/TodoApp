@@ -2,7 +2,7 @@
   <div class="task-item">
     <p>{{ task }}</p>
     <ul class="tag-list">
-      タグ：<li v-for="tagItem in tag" :key="tagItem">{{ tagItem }}</li>
+      <li v-for="tagItem in tag" :key="tagItem">{{ tagItem }}</li>
     </ul>
   </div>
 </template>
@@ -17,7 +17,7 @@ export default {
     tag: {
       type: Array,
       required: true,
-    },
+    }
   },
 };
 </script>

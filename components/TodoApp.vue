@@ -26,17 +26,18 @@
         <TaskList :status="status.COMPLETED" :tasks="tasks_completed" />
       </div>
     </div>
-    <Modal
-      @closeModal="closeModal"
-      v-if="showModal"
-      :status="selectedStatus"
-      :tasks="tasks"
-      @addTaskUnsupported="addTaskUnsupported"
-      @addTaskInProgress="addTaskInProgress"
-      @addTaskInReview="addTaskInReview"
-      @addTaskCompleted="addTaskCompleted"
-    ></Modal>
   </div>
+  <Modal
+    @closeModal="closeModal"
+    v-if="showModal"
+    :status="selectedStatus"
+    :tasks="tasks"
+    :tagHistory="tagHistory"
+    @addTaskUnsupported="addTaskUnsupported"
+    @addTaskInProgress="addTaskInProgress"
+    @addTaskInReview="addTaskInReview"
+    @addTaskCompleted="addTaskCompleted"
+  ></Modal>
 </template>
 
 <script>
@@ -63,7 +64,23 @@ export default {
       tasks_in_review: [],
       tasks_completed: [],
       selectedStatus: false,
-      // selectedStatus: '',
+      tagHistory: [],
+      // newTaskObj_unsupported: {
+      //   id: this.tasks_unsupported.length + 1,
+      //   value: this.tasks_unsupported,
+      // },
+      // newTaskObj_in_progress: {
+      //   id: this.tasks_in_progress.length + 1,
+      //   value: this.tasks_in_progress,
+      // },
+      // newTaskObj_in_review: {
+      //   id: this.tasks_in_review.length + 1,
+      //   value: this.tasks_in_review,
+      // },
+      // newTaskObj_completed: {
+      //   id: this.tasks_completed.length + 1,
+      //   value: this.tasks_completed,
+      // },
     };
   },
   methods: {
@@ -76,21 +93,23 @@ export default {
     },
     addTaskUnsupported(task) {
       this.tasks_unsupported.push(task);
-      console.log(task);
-      console.log(this.tasks_unsupported);
+      // this.tasks_unsupported.push(this.newTaskObj_unsupported)
+      console.log(this.tasks_unsupported.length);
     },
     addTaskInProgress(task) {
       this.tasks_in_progress.push(task);
-      console.log(task);
+      // this.tasks_in_progress.push(this.newTaskObj_in_progress);
       console.log(this.tasks_in_progress);
     },
     addTaskInReview(task) {
       this.tasks_in_review.push(task);
+      // this.tasks_in_review.push(this.newTaskObj);
       console.log(task);
       console.log(this.tasks_in_review);
     },
     addTaskCompleted(task) {
       this.tasks_completed.push(task);
+      // this.tasks_completed.push(this.newTaskObj);
       console.log(task);
       console.log(this.tasks_completed);
     },
@@ -104,19 +123,19 @@ export default {
 
 <style scoped>
 .container {
-  padding: 50px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   min-height: 100vh;
-  width: 100vw;
+  width: 100%;
   background-color: whitesmoke;
 }
 .row {
-  width: 100%;
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 40px;
   flex-grow: 1;
 }
 </style>

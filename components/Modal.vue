@@ -85,7 +85,7 @@ export default {
       selectTagList: false,
       showCheckTags: false,
       newTag: "", // 新しいタグを保持するデータプロパティ
-      selectedTags: [],
+      selectedTags: []
     };
   },
 

@@ -6,8 +6,8 @@
     <div class="card-columns">
       <draggable
         :list="tasks"
-        item-key="no"
         @update:list="tasks = $event"
+        item-key="no"
         :animation="700"
         group="taskGroup"
         class="tasks-box"
@@ -53,7 +53,6 @@ export default {
 .task-list {
   background-color: white;
   padding: 15px;
-  width: 250px;
   height: 75vh;
   overflow: auto;
 }
@@ -70,8 +69,8 @@ export default {
 .card-columns {
   height: 90%;
 }
-.tasks-box{
-  height:100%;
+.tasks-box {
+  height: 100%;
 }
 .task-item {
   border: 1px solid #ccc;

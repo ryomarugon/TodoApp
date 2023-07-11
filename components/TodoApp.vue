@@ -83,12 +83,19 @@ export default {
   align-items: center;
   min-height: 100vh;
   width: 100%;
-  background-color: whitesmoke;
+  background-color: whitesmoke; 
 }
 .row {
+  width: 100%;
   display: flex;
   justify-content: center;
   gap: 40px;
   flex-grow: 1;
+  overflow: auto;
 }
+.col{
+  width: 250px;
+  overflow: auto;
+}
+
 </style>

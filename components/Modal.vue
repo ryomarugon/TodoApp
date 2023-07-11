@@ -100,11 +100,6 @@ export default {
     createTag($event) {
       $event.preventDefault();
       if (this.newTag) {
-        // const newTagObj = {
-        //   id: this.tagHistory.length + 1,
-        //   value: this.newTag,
-        // };
-        // this.tagHistory.push(newTagObj);
         this.tagHistory.push(this.newTag);
         console.log(this.tagHistory);
         this.newTag = ""; // 新しいタグの入力フィールドをリセット

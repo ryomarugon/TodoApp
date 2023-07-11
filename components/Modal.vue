@@ -60,10 +60,6 @@ export default {
     TaskList,
   },
   props: {
-    tasks: {
-      type: Array,
-      required: true,
-    },
     status: {
       type: String,
       required: true,
@@ -72,6 +68,10 @@ export default {
       type: Array,
       required: true,
     },
+    index: {
+      type: Number,
+      required: true
+    }
   },
 
   data() {
@@ -124,29 +124,11 @@ export default {
     },
     handleSubmit() {
       const formData = {
-        task: this.form.task,
-        tag: this.selectedTags,
-        status: this.status,
+        name: this.form.task,
+        tags: this.selectedTags,
       };
-      if (this.form.task !== "") {
-        switch (formData.status) {
-          case "UNSUPPORTED":
-            this.$emit("addTaskUnsupported", formData);
-            break;
-          case "IN_PROGRESS":
-            this.$emit("addTaskInProgress", formData);
-            break;
-          case "IN_REVIEW":
-            this.$emit("addTaskInReview", formData);
-            break;
-          case "COMPLETED":
-            this.$emit("addTaskCompleted", formData);
-            break;
-          default:
-            break;
-        }
-        this.$emit("closeModal");
-      }
+      this.$emit("addTask", formData, this.index)
+      this.$emit("closeModal");
     },
     closeModal() {
       this.$emit("closeModal");

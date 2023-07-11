@@ -9,7 +9,6 @@
 import Header from "@/components/Header.vue";
 import TodoApp from "@/components/TodoApp.vue";
 import TaskList from "@/components/TaskList.vue";
-import TaskItem from "@/components/TaskItem.vue";
 import Modal from "@/components/Modal.vue";
 
 export default {
@@ -17,7 +16,6 @@ export default {
     Header,
     TodoApp,
     TaskList,
-    TaskItem,
     Modal,
   },
   data() {

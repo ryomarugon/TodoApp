@@ -30,7 +30,6 @@
 </template>
 
 <script>
-// import TaskItem from "./TaskItem.vue";
 import draggable from "vuedraggable";
 
 export default {

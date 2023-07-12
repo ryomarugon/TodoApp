@@ -15,6 +15,7 @@
     :status="selectedStatus"
     :index="taskIndex"
     :tagHistory="tagHistory"
+    :showModal="true"
     @addTask="addTask"
   ></Modal>
 </template>
@@ -35,6 +36,7 @@ export default {
       statusList: ["未対応", "処理中", "レビュー中", "完了"],
       showModal: false,
       tasks_group: [
+        // dummy data for demostrating draggable tags
         [
           { name: "test", tags: ["tag1", "tag2"] },
           { name: "test2", tags: ["tag3", "tag4"] },
@@ -62,7 +64,9 @@ export default {
       this.selectedStatus = status;
       this.showModal = true;
       console.log(status);
+      event.stopPropagation();
     },
+    // There is $emit element in handleSubmit function of Modal component
     addTask(task, index) {
       this.tasks_group[index].unshift(task);
     },
@@ -83,7 +87,7 @@ export default {
   align-items: center;
   min-height: 100vh;
   width: 100%;
-  background-color: whitesmoke; 
+  background-color: whitesmoke;
 }
 .row {
   width: 100%;
@@ -93,9 +97,8 @@ export default {
   flex-grow: 1;
   overflow: auto;
 }
-.col{
+.col {
   width: 250px;
   overflow: auto;
 }
-
 </style>

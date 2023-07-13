@@ -50,6 +50,8 @@ export default {
 </script>
 <style scoped>
 .task-list {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   padding: 15px;
   height: 75vh;

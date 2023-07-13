@@ -24,7 +24,6 @@
             size="4"
             name="tag"
             multiple
-            @change="handleTagChange"
           >
             <div
               v-for="option in tagHistory"
@@ -151,6 +150,7 @@ export default {
         return this.selectedTags.includes(tag);
       }
     },
+
     handleSubmit() {
       const formData = {
         name: this.form.task,

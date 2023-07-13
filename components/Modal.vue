@@ -1,6 +1,6 @@
 <template>
   <div class="modal">
-    <div class="modal-wrap">
+    <div class="modal-wrap" ref="modalWrap">
       <h3 class="text-lg">タスクの追加</h3>
       <div>
         <input
@@ -11,8 +11,10 @@
           placeholder="タスクを入力..."
           required
         /><br />
-        <div class="input_contents add_tag_button">
-          タグ<button @click="addTag($event)">+</button><br />
+        <div class="input_contents add_tag">
+          タグ<button @click="addTag($event)" class="add_tag_button">
+            {{ addTagButtonText }}</button
+          ><br />
         </div>
         <div v-if="inputTagForm" class="input_contents input_tag">
           <div
@@ -42,9 +44,10 @@
             placeholder="新しいタグを入力"
           />
           <button @click="createTag($event)">作成</button>
+          <p class="error_same_tag">{{ sameTagError }}</p>
         </div>
         <div class="input_contents">
-          <button @click="$emit('closeModal')">キャンセル</button>
+          <button @click="closeModal">キャンセル</button>
           <button @click="handleSubmit">追加</button>
         </div>
       </div>
@@ -60,16 +63,20 @@ export default {
     TaskList,
   },
   props: {
-    tasks: {
-      type: Array,
-      required: true,
-    },
     status: {
       type: String,
       required: true,
     },
     tagHistory: {
       type: Array,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+    showModal: {
+      type: Boolean,
       required: true,
     },
   },
@@ -84,68 +91,86 @@ export default {
       inputTagForm: false,
       selectTagList: false,
       showCheckTags: false,
-      newTag: "", // 新しいタグを保持するデータプロパティ
+      newTag: "", // Data property for restore new tag
       selectedTags: [],
+      addTagButtonText: "+",
+      sameTagError: "",
     };
+  },
+  mounted() {
+    // Add addEventListener to outside elements of modal-wrap
+    document.addEventListener("click", this.handleOutsideClick);
+  },
+  beforeUnmount() {
+    // クリックイベントリスナーを解除
+    document.removeEventListener("click", this.handleOutsideClick);
+  },
+  watch: {
+    tagHistory: {
+      handler(newVal) {
+        this.selectTagList = newVal.length > 0;
+      },
+      immediate: true,
+    },
   },
 
   methods: {
     addTag($event) {
       $event.preventDefault();
-      this.inputTagForm = true;
-      if (this.tagHistory.length > 0) {
-        this.selectTagList = true;
-      }
+      this.addTagButtonText = this.addTagButtonText === "+" ? "−" : "+"; // Switch button text + and -
+      this.inputTagForm = !this.inputTagForm;
+      // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
+      // if (this.tagHistory.length > 0) {
+      //   this.selectTagList = true;
+      // }
     },
     createTag($event) {
       $event.preventDefault();
-      if (this.newTag) {
-        // const newTagObj = {
-        //   id: this.tagHistory.length + 1,
-        //   value: this.newTag,
-        // };
-        // this.tagHistory.push(newTagObj);
+      if (!this.tagHistory.includes(this.newTag)) {
         this.tagHistory.push(this.newTag);
         console.log(this.tagHistory);
-        this.newTag = ""; // 新しいタグの入力フィールドをリセット
+        this.newTag = ""; // Reset the value of newTag input field
+        this.sameTagError = "";
         this.selectTagList = true;
+      } else {
+        this.sameTagError = "既に登録されているタグです";
+        this.newTag = "";
       }
     },
     toggleTag(tag) {
       const index = this.selectedTags.indexOf(tag);
+      console.log(index);
       if (index !== -1) {
-        this.selectedTags.splice(index, 1); // タグを削除
+        this.selectedTags.splice(index, 1); // Remove checked tags from selectTags Array
       } else {
-        this.selectedTags.push(tag); // タグを追加
+        this.selectedTags.push(tag); // Add checked tags to selectTags Array
       }
     },
     isSelected(tag) {
-      return this.selectedTags.includes(tag);
+      if (this.inputTagForm === true) {
+        return this.selectedTags.includes(tag);
+      }
     },
     handleSubmit() {
       const formData = {
-        task: this.form.task,
-        tag: this.selectedTags,
-        status: this.status,
+        name: this.form.task,
+        tags: this.selectedTags,
       };
-      if (this.form.task !== "") {
-        switch (formData.status) {
-          case "UNSUPPORTED":
-            this.$emit("addTaskUnsupported", formData);
-            break;
-          case "IN_PROGRESS":
-            this.$emit("addTaskInProgress", formData);
-            break;
-          case "IN_REVIEW":
-            this.$emit("addTaskInReview", formData);
-            break;
-          case "COMPLETED":
-            this.$emit("addTaskCompleted", formData);
-            break;
-          default:
-            break;
-        }
+
+      // it means name of formData(input name:task) is required element
+      if (formData.name !== "") {
+        this.$emit("addTask", formData, this.index);
         this.$emit("closeModal");
+      }
+    },
+
+    // If user clicks modal oudside modal-wrap, closeModal function will be called
+    handleOutsideClick(event) {
+      if (
+        this.showModal == true &&
+        !this.$refs.modalWrap.contains(event.target)
+      ) {
+        this.closeModal();
       }
     },
     closeModal() {
@@ -178,12 +203,30 @@ export default {
   align-items: center;
 }
 .input_contents {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .select_tag {
   width: 150px;
   height: 75px;
   border: 1px solid black;
   overflow: auto;
+}
+
+.error_same_tag {
+  color: red;
+}
+
+.add_tag_button {
+  width: 25px;
+  text-align: center;
+  border: none;
+  border-radius: 35%;
+  outline: none;
+  background: transparent;
+  background-color: #d9d9d9;
+  margin-left: 10px;
+}
+.add_tag_button:active {
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

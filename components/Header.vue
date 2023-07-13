@@ -13,7 +13,4 @@ export default {};
 nav{
   width: 100vw;
 }
-/* a{
-    padding-left:10px ;
-} */
 </style>

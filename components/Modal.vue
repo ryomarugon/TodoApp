@@ -44,6 +44,7 @@
             placeholder="新しいタグを入力"
           />
           <button @click="createTag($event)">作成</button>
+          <p class="error_same_tag">{{ sameTagError }}</p>
         </div>
         <div class="input_contents">
           <button @click="closeModal">キャンセル</button>
@@ -93,6 +94,7 @@ export default {
       newTag: "", // Data property for restore new tag
       selectedTags: [],
       addTagButtonText: "+",
+      sameTagError: "",
     };
   },
   mounted() {
@@ -103,27 +105,41 @@ export default {
     // クリックイベントリスナーを解除
     document.removeEventListener("click", this.handleOutsideClick);
   },
+  watch: {
+    tagHistory: {
+      handler(newVal) {
+        this.selectTagList = newVal.length > 0;
+      },
+      immediate: true,
+    },
+  },
 
   methods: {
     addTag($event) {
       $event.preventDefault();
-      this.addTagButtonText = this.addTagButtonText === "+" ? "−" : "+";  // Switch button text + and -
-      this.inputTagForm = this.inputTagForm === false ? true : false; // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
-      if (this.tagHistory.length > 0) {
-        this.selectTagList = true;
-      }
+      this.addTagButtonText = this.addTagButtonText === "+" ? "−" : "+"; // Switch button text + and -
+      this.inputTagForm = !this.inputTagForm;
+      // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
+      // if (this.tagHistory.length > 0) {
+      //   this.selectTagList = true;
+      // }
     },
     createTag($event) {
       $event.preventDefault();
-      if (this.newTag) {
+      if (!this.tagHistory.includes(this.newTag)) {
         this.tagHistory.push(this.newTag);
         console.log(this.tagHistory);
         this.newTag = ""; // Reset the value of newTag input field
+        this.sameTagError = "";
         this.selectTagList = true;
+      } else {
+        this.sameTagError = "既に登録されているタグです";
+        this.newTag = "";
       }
     },
     toggleTag(tag) {
       const index = this.selectedTags.indexOf(tag);
+      console.log(index);
       if (index !== -1) {
         this.selectedTags.splice(index, 1); // Remove checked tags from selectTags Array
       } else {
@@ -141,7 +157,7 @@ export default {
         tags: this.selectedTags,
       };
 
-      // it means name of formData(input name:task) is required element  
+      // it means name of formData(input name:task) is required element
       if (formData.name !== "") {
         this.$emit("addTask", formData, this.index);
         this.$emit("closeModal");
@@ -149,7 +165,7 @@ export default {
     },
 
     // If user clicks modal oudside modal-wrap, closeModal function will be called
-    handleOutsideClick(event) {  
+    handleOutsideClick(event) {
       if (
         this.showModal == true &&
         !this.$refs.modalWrap.contains(event.target)
@@ -187,7 +203,7 @@ export default {
   align-items: center;
 }
 .input_contents {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .select_tag {
   width: 150px;
@@ -195,6 +211,11 @@ export default {
   border: 1px solid black;
   overflow: auto;
 }
+
+.error_same_tag {
+  color: red;
+}
+
 .add_tag_button {
   width: 25px;
   text-align: center;

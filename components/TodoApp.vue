@@ -55,7 +55,7 @@ export default {
         ],
       ],
       selectedStatus: "",
-      tagHistory: [],
+      tagHistory: ["tag1", "tag2", "tag3", "tag4"],
     };
   },
   methods: {
@@ -84,7 +84,6 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   min-height: 100vh;
   width: 100%;
   background-color: whitesmoke;

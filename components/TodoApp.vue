@@ -104,16 +104,19 @@ export default {
   overflow: auto;
 }
 
-.tag-filter {
+.tag-filter { 
+  position: absolute;
   gap: 0;
   display: flex;
   flex-direction: column;
   align-content: flex-start;
+  z-index: 1;
 }
 
 .task-list-row {
+  position: absolute;
   display: flex;
-  margin-top: 40px;
+  margin-top: 170px;
   gap: 40px;
   overflow: auto;
 }

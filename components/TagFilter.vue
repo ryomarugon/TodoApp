@@ -4,13 +4,13 @@
     <div class="selected_tags" @click="showTags($event)">
       <p class="">▼</p>
     </div>
-    <div v-if="showFilteringEl" class="showFilteringEl">
+    <div v-if="showFilteringEl" class="show_filtering_el">
       <div class="filtering_tags">
         <input
           type="text"
           class="searching_tag"
           placeholder="タグを検索…"
-          @change="handleTagSearch"
+          @input="handleTagSearch"
         />
         <div
           class="tag_list"
@@ -111,17 +111,25 @@ export default {
   padding: 5px;
   border: 1px solid black;
 }
-.showFilteringEl {
+.show_filtering_el {
+  background-color: white;
   display: flex;
   flex-direction: column;
-  height: 75px;
+  justify-content: space-between;
+  height: 135px;
   width: 100%;
+  
   border: 1px solid black;
   overflow: auto;
 }
 .filtering_tags {
-  padding: 5px;
+  padding: 10px 5px;
 }
+
+.tag_list{
+cursor:pointer;
+}
+
 .searching_tag {
   width: 90%;
   height: 15px;

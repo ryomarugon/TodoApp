@@ -107,6 +107,7 @@ export default {
 
 .filtering_box {
   width: 100%;
+  cursor: pointer;
 }
 
 .selected_tags {
@@ -141,10 +142,6 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 5px;
-}
-
-.tag_list {
-  cursor: pointer;
 }
 
 .filtering_btn {

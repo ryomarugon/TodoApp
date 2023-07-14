@@ -32,7 +32,7 @@ body {
   height: 100vh;
   width: 100vw;
 }
-.main_contents{  
+.main_contents {
   width: 100%;
   background-color: whitesmoke;
 }

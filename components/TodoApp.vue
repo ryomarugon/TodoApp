@@ -90,21 +90,21 @@ export default {
 
 <style scoped>
 .container {
-  padding: 20px;
   min-height: 100vh;
   width: 100%;
-  background-color: whitesmoke;
 }
 
 .row {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  overflow: auto;
+  
 }
 
 .tag-filter { 
+  width: 150px;
   position: absolute;
   gap: 0;
   display: flex;
@@ -114,11 +114,12 @@ export default {
 }
 
 .task-list-row {
+  width: 100%;
   position: absolute;
   display: flex;
+  /* justify-content: center; */
   margin-top: 170px;
   gap: 40px;
-  overflow: auto;
 }
 
 .col {

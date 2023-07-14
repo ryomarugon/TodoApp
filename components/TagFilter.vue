@@ -1,30 +1,32 @@
 <template>
-  <p>タグ</p>
-  <div class="filtering_box">
-    <div class="selected_tags" @click="showTags($event)">
-      <p class="">▼</p>
-    </div>
-    <div v-if="showFilteringEl" class="show_filtering_el">
-      <div class="filtering_tags">
-        <input
-          type="text"
-          class="searching_tag"
-          placeholder="タグを検索…"
-          @input="handleTagSearch"
-        />
-        <div
-          class="tag_list"
-          v-for="option in tagHistory"
-          :value="option"
-          :key="option"
-          @click="toggleTag(option)"
-          v-show="isTagVisible(option)"
-        >
-          {{ option }}
-          <span v-if="isSelected(option)">✔︎</span>
-        </div>
+  <div class="container">
+    <p>タグ</p>
+    <div class="filtering_box">
+      <div class="selected_tags" @click="showTags($event)">
+        <p class="">▼</p>
       </div>
-      <div class="filtering_btn">絞り込む</div>
+      <div v-if="showFilteringEl" class="show_filtering_el" :style="{ width: getWidth() }">
+        <div class="filtering_tags">
+          <input
+            type="text"
+            class="searching_tag"
+            placeholder="タグを検索…"
+            @input="handleTagSearch"
+          />
+          <div
+            class="tag_list"
+            v-for="option in tagHistory"
+            :value="option"
+            :key="option"
+            @click="toggleTag(option)"
+            v-show="isTagVisible(option)"
+          >
+            {{ option }}
+            <span v-if="isSelected(option)">✔︎</span>
+          </div>
+        </div>
+        <div class="filtering_btn custom_padding">絞り込む</div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,19 +54,23 @@ export default {
         this.tagHistory.unshift("未選択");
       }
       this.showFilteringEl = !this.showFilteringEl;
-      if(!this.showFilteringEl){
-        this.searchText="";
+      if (!this.showFilteringEl) {
+        this.searchText = "";
       }
+    },
+    getWidth() {
+      const selectedTagsWidth = document.querySelector('.selected_tags')?.clientWidth;
+      return selectedTagsWidth ? `${selectedTagsWidth}px` : '100%';
     },
     handleTagSearch(event) {
       this.searchText = event.target.value;
     },
     isTagVisible(tag) {
       if (this.searchText == "") {
-        return true;  //if the text typed in searching filed was none, display all option
+        return true; //if the text typed in searching filed was none, display all option
       } else {
         if (tag.includes(this.searchText)) {
-            return true; //if the text typed in searching filed was included in tagHistory, display the tags
+          return true; //if the text typed in searching filed was included in tagHistory, display the tags
         }
       }
     },
@@ -97,8 +103,12 @@ export default {
 };
 </script>
 <style scoped>
+.container{
+  width: 100%;
+}
+
 .filtering_box {
-  width: 150px;
+  width: 100%;
 }
 
 .selected_tags {
@@ -118,16 +128,12 @@ export default {
   justify-content: space-between;
   height: 135px;
   width: 100%;
-  
+  /* padding: 5px; */
   border: 1px solid black;
   overflow: auto;
 }
 .filtering_tags {
-  padding: 10px 5px;
-}
-
-.tag_list{
-cursor:pointer;
+  margin: 5px;
 }
 
 .searching_tag {
@@ -139,9 +145,18 @@ cursor:pointer;
   justify-content: center;
   margin-bottom: 5px;
 }
+
+.tag_list {
+  cursor: pointer;
+}
+
 .filtering_btn {
   color: white;
   background-color: black;
   text-align: center;
+}
+
+.filtering_btn.custom_padding {
+  padding: 0;
 }
 </style>

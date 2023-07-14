@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Header />
-    <TodoApp />
+    <div class="header"><Header /></div>
+    <div class="main_contents"><TodoApp /></div>
   </div>
 </template>
 
@@ -19,16 +19,21 @@ export default {
     Modal,
   },
   data() {
-    return {
-    };
+    return {};
   },
 };
 </script>
 
 <style>
-body{
+body {
   padding: 0;
   margin: 0;
-  font-size: 14px ;
+  font-size: 14px;
+  height: 100vh;
+  width: 100vw;
+}
+.main_contents {
+  width: 100%;
+  background-color: whitesmoke;
 }
 </style>

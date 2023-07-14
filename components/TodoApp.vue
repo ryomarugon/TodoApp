@@ -1,11 +1,16 @@
 <template>
   <div class="container">
     <div class="row">
-      <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
-        <button @click="openModal(statusList[index], index)">
-          +<span class="text-success">課題の追加</span>
-        </button>
-        <TaskList :status="statusList[index]" :tasks="tasks_group[index]" />
+      <div class="tag-filter">
+        <TagFilter :tagHistory="tagHistory" />
+      </div>
+      <div class="task-list-row">
+        <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
+          <button @click="openModal(statusList[index], index)">
+            +<span class="text-success">課題の追加</span>
+          </button>
+          <TaskList :status="statusList[index]" :tasks="tasks_group[index]" />
+        </div>
       </div>
     </div>
   </div>
@@ -21,11 +26,13 @@
 </template>
 
 <script>
+import TagFilter from "./TagFilter.vue";
 import TaskList from "./TaskList.vue";
 import Modal from "./Modal.vue";
 
 export default {
   components: {
+    TagFilter,
     TaskList,
     Modal,
   },
@@ -80,22 +87,39 @@ export default {
 
 <style scoped>
 .container {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   min-height: 100vh;
   width: 100%;
-  background-color: whitesmoke;
+  padding: 20px;
 }
+
 .row {
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
-  justify-content: center;
-  gap: 40px;
+  flex-direction: column;
   flex-grow: 1;
-  overflow: auto;
 }
+
+.tag-filter {
+  width: 150px;
+  position: absolute;
+  gap: 0;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  z-index: 1;
+}
+
+.task-list-row {
+  width: 100%;
+  position: absolute;
+  display: flex;
+  /* justify-content: center; */
+  margin-top: 170px;
+  gap: 40px;
+  z-index: 0;
+}
+
 .col {
   width: 250px;
   overflow: auto;

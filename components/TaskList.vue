@@ -50,9 +50,11 @@ export default {
 </script>
 <style scoped>
 .task-list {
+  display: flex;
+  flex-direction: column;
   background-color: white;
-  padding: 15px;
-  height: 75vh;
+  padding: 30px;
+  height: 70vh;
   overflow: auto;
 }
 .task-count {
@@ -72,14 +74,14 @@ export default {
   height: 100%;
 }
 .task-item {
+  background-color: white;
+  min-height: 75px;
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 10px;
 }
 .tag-list {
   display: flex;
-  /* flex-direction: column; */
-  /* align-content: flex-start; */
   list-style: none;
   margin: 0;
   padding: 0;

@@ -1,5 +1,4 @@
 <template>
-  <div class="container">
     <p>タグ</p>
     <div class="filtering_box">
       <div class="selected_tags" @click="showTags($event)">
@@ -28,7 +27,6 @@
         <div class="filtering_btn custom_padding">絞り込む</div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -128,7 +126,6 @@ export default {
   justify-content: space-between;
   height: 135px;
   width: 100%;
-  /* padding: 5px; */
   border: 1px solid black;
   overflow: auto;
 }

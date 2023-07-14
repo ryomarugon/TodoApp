@@ -1,19 +1,16 @@
 <template>
   <div class="container">
-      <div class="row">
-        <div class="tag-filter">
-          <TagFilter :tagHistory="tagHistory" />
+    <div class="row">
+      <div class="tag-filter">
+        <TagFilter :tagHistory="tagHistory" />
+      </div>
+      <div class="task-list-row">
+        <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
+          <button @click="openModal(statusList[index], index)">
+            +<span class="text-success">課題の追加</span>
+          </button>
+          <TaskList :status="statusList[index]" :tasks="tasks_group[index]" />
         </div>
-        <div class="task-list-row">
-          <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
-            <button @click="openModal(statusList[index], index)">
-              +<span class="text-success">課題の追加</span>
-            </button>
-            <TaskList
-              :status="statusList[index]"
-              :tasks="tasks_group[index]"
-            />
-          </div>
       </div>
     </div>
   </div>
@@ -92,6 +89,7 @@ export default {
 .container {
   min-height: 100vh;
   width: 100%;
+  padding: 20px;
 }
 
 .row {
@@ -100,10 +98,9 @@ export default {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  
 }
 
-.tag-filter { 
+.tag-filter {
   width: 150px;
   position: absolute;
   gap: 0;
@@ -120,6 +117,7 @@ export default {
   /* justify-content: center; */
   margin-top: 170px;
   gap: 40px;
+  z-index: 0;
 }
 
 .col {

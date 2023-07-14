@@ -35,6 +35,5 @@ body {
 .main_contents{  
   width: 100%;
   background-color: whitesmoke;
-  padding: 20px;
 }
 </style>

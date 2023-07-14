@@ -74,15 +74,14 @@ export default {
   height: 100%;
 }
 .task-item {
-  height: 75px;
+  background-color: white;
+  min-height: 75px;
   border: 1px solid #ccc;
   padding: 5px;
   margin-bottom: 10px;
 }
 .tag-list {
   display: flex;
-  /* flex-direction: column; */
-  /* align-content: flex-start; */
   list-style: none;
   margin: 0;
   padding: 0;

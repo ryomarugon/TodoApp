@@ -61,10 +61,10 @@ export default {
     },
     isTagVisible(tag) {
       if (this.searchText == "") {
-        return true;
+        return true;  //if the text typed in searching filed was none, display all option
       } else {
         if (tag.includes(this.searchText)) {
-            return true;
+            return true; //if the text typed in searching filed was included in tagHistory, display the tags
         }
       }
     },

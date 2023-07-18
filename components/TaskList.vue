@@ -120,13 +120,13 @@ export default {
   list-style: none;
   margin: 0;
   padding: 0;
-  flex-wrap: wrap; /* タグを折り返す */
+  flex-wrap: wrap;
 }
 li {
   background-color: olive;
   color: white;
   margin: 5px 5px 0 0;
-  white-space: nowrap; /* テキストやタグが水平に並ぶようにする */
+  white-space: nowrap;
 }
 p,
 ul {

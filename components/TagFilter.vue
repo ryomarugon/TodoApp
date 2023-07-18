@@ -1,7 +1,7 @@
 <template>
   <p>タグ</p>
   <div class="filtering_box">
-    <div class="selected_tags" @click="showTags($event)">
+    <div class="selected_tags" @click="showFilterTags($event)">
       <p class="">▼</p>
     </div>
     <div
@@ -16,15 +16,16 @@
           placeholder="タグを検索…"
           @input="handleTagSearch"
         />
-        <option>未選択</option>
+        <!-- <div>未選択</div> -->
         <div
           class="tag_list"
           v-for="option in tagHistory"
           :value="option"
           :key="option"
-          @click="toggleTag(option)"
+          @click="toggleFilterTag(option)"
           v-show="isTagVisible(option)"
         >
+
           {{ option }}
           <span v-if="isSelected(option)">✔︎</span>
         </div>
@@ -52,11 +53,14 @@ export default {
     tasks: {
       type: Array,
       required: true,
-    }
+    },
   },
   methods: {
-    showTags($event) {
+    showFilterTags($event) {
       $event.preventDefault();
+      if (!this.tagHistory.includes("未選択")) {
+        this.tagHistory.unshift("未選択");
+      }
       this.showFilteringEl = !this.showFilteringEl;
       if (!this.showFilteringEl) {
         this.searchText = "";
@@ -79,7 +83,7 @@ export default {
         }
       }
     },
-    toggleTag(tag) {
+    toggleFilterTag(tag) {
       //If selected tag is "未選択（unselected）" is clicked
       if (tag === "未選択") {
         if (!this.filteredTags.includes(tag)) {

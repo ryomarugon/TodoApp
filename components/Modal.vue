@@ -26,10 +26,10 @@
             multiple
           >
             <div
-              v-for="option in tagHistory"
+              v-for="option in addTagHistory"
               :value="option"
               :key="option"
-              @click="toggleTag(option)"
+              @click="toggleAddTag(option)"
             >
               {{ option }}
               <span v-if="isSelected(option)">✔︎</span>
@@ -79,7 +79,6 @@ export default {
       required: true,
     },
   },
-
   data() {
     return {
       form: {
@@ -89,12 +88,17 @@ export default {
       },
       inputTagForm: false,
       selectTagList: false,
-      showCheckTags: false,
       newTag: "", // Data property for restore new tag
       selectedTags: [],
+      TagHistory_exceptUnselected: [],
       addTagButtonText: "+",
       sameTagError: "",
     };
+  },
+  computed: {
+    addTagHistory() {
+      return this.tagHistory.filter((tag) => tag !== "未選択");
+    },
   },
   mounted() {
     // Add addEventListener to outside elements of modal-wrap
@@ -136,7 +140,7 @@ export default {
         this.newTag = "";
       }
     },
-    toggleTag(tag) {
+    toggleAddTag(tag) {
       const index = this.selectedTags.indexOf(tag);
       console.log(index);
       if (index !== -1) {

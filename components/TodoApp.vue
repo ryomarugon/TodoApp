@@ -70,7 +70,7 @@ export default {
           { name: "test2", tags: ["tag3", "tag4"] },
         ],
       ],
-      filteredTasks: [],
+      isFiltered: false, 
       selectedStatus: "",
       tagHistory: ["tag1", "tag2", "tag3", "tag4"],
     };
@@ -109,7 +109,7 @@ export default {
     },
   },
   created() {
-    // 初期化時に filteredTasks を設定する
+    //Set filteredTasks when it was reset
     this.filteredTasks = this.tasks_group.map((tasks) => tasks.slice());
     console.log(this.filteredTasks);
   },

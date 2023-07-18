@@ -2,14 +2,23 @@
   <div class="container">
     <div class="row">
       <div class="tag-filter">
-        <TagFilter :tagHistory="tagHistory" />
+        <!-- {{ filteredTasks }} -->
+        <TagFilter
+          :tagHistory="tagHistory"
+          :tasks="tasks_group"
+          @filterTags="filterTags"
+        />
       </div>
       <div class="task-list-row">
         <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
           <button @click="openModal(statusList[index], index)">
             +<span class="text-success">課題の追加</span>
           </button>
-          <TaskList :status="statusList[index]" :tasks="tasks_group[index]" />
+          <TaskList
+            :status="statusList[index]"
+            :tasks="tasks_group[index]"
+            :filteredTasks="filteredTasks[index]"
+          />
         </div>
       </div>
     </div>
@@ -43,7 +52,7 @@ export default {
       statusList: ["未対応", "処理中", "レビュー中", "完了"],
       showModal: false,
       tasks_group: [
-        // dummy data for demostrating draggable tags
+        // dummy data for demonstrating draggable tags
         [
           { name: "test", tags: ["tag1", "tag2"] },
           { name: "test2", tags: ["tag3", "tag4"] },
@@ -61,11 +70,26 @@ export default {
           { name: "test2", tags: ["tag3", "tag4"] },
         ],
       ],
+      filteredTasks: [],
       selectedStatus: "",
       tagHistory: ["tag1", "tag2", "tag3", "tag4"],
     };
   },
   methods: {
+    filterTags(filteredTags) {
+      console.log("selected tags: ", filteredTags);
+      if (filteredTags.length === 0 || filteredTags.includes("未選択")) {
+        this.filteredTasks = this.tasks_group;
+        console.log(this.filteredTasks);
+      } else {
+        this.filteredTasks = this.tasks_group.map((tasks) =>
+          tasks.filter((task) => {
+            return filteredTags.every((tag) => task.tags.includes(tag));
+          })
+        );
+        console.log(this.filteredTasks);
+      }
+    },
     openModal(status, index) {
       this.taskIndex = index;
       this.selectedStatus = status;
@@ -75,12 +99,19 @@ export default {
     },
     // There is $emit element in handleSubmit function of Modal component
     addTask(task, index) {
+      console.log(task.tags);
       this.tasks_group[index].unshift(task);
+      console.log(this.tasks_group);
     },
     closeModal() {
       this.showModal = false;
       this.selectedStatus = "";
     },
+  },
+  created() {
+    // 初期化時に filteredTasks を設定する
+    this.filteredTasks = this.tasks_group.map((tasks) => tasks.slice());
+    console.log(this.filteredTasks);
   },
 };
 </script>

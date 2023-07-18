@@ -1,12 +1,42 @@
 <template>
-  <div class="task-list">
+  <div
+    class="task-list"
+    v-if="filteredTasks === tasks || filteredTasks.includes('未選択')">
     <h2>
       {{ status }}<span class="task-count">{{ tasks.length }}</span>
     </h2>
     <div class="card-columns">
       <draggable
         :list="tasks"
-        @update:list="tasks = $event"
+        @update:list="tasks"
+        item-key="no"
+        :animation="700"
+        group="taskGroup"
+        class="tasks-box"
+      >
+        <template #item="{ element }">
+          <div class="task-item">
+            <div>
+              <p>{{ element.name }}</p>
+              <ul class="tag-list">
+                <li v-for="tagItem in element.tags" :key="tagItem">
+                  {{ tagItem }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </template>
+      </draggable>
+    </div>
+  </div>
+  <div v-else class="task-list">
+    <h2>
+      {{ status }}<span class="task-count">{{ filteredTasks.length }}</span>
+    </h2>
+    <div class="card-columns">
+      <draggable
+        :list="filteredTasks"
+        @update:list="filteredTasks"
         item-key="no"
         :animation="700"
         group="taskGroup"
@@ -45,6 +75,10 @@ export default {
       type: Array,
       required: true,
     },
+    filteredTasks: {
+      type: Array,
+      required: true,
+    },
   },
 };
 </script>
@@ -79,17 +113,20 @@ export default {
   border: 1px solid #ccc;
   padding: 5px;
   margin-bottom: 10px;
+  word-wrap: break-word;
 }
 .tag-list {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap; /* タグを折り返す */
 }
 li {
   background-color: olive;
   color: white;
-  margin-right: 5px;
+  margin: 5px 5px 0 0;
+  white-space: nowrap; /* テキストやタグが水平に並ぶようにする */
 }
 p,
 ul {

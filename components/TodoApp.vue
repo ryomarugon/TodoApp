@@ -70,7 +70,7 @@ export default {
           { name: "test2", tags: ["tag3", "tag4"] },
         ],
       ],
-      isFiltered: false, 
+      filteredTasks: [],
       selectedStatus: "",
       tagHistory: ["tag1", "tag2", "tag3", "tag4"],
     };

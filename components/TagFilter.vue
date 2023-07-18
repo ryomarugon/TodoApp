@@ -166,14 +166,15 @@ export default {
   background-color: white;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   height: 135px;
   width: 100%;
   border: 1px solid black;
   overflow: auto;
 }
 .filtering_tags {
-  margin: 5px;
+  margin: 5px 5px 25px 5px;
+  height: 100%;
 }
 
 .searching_tag {
@@ -190,5 +191,7 @@ export default {
   color: white;
   background-color: black;
   text-align: center;
+  position: sticky;
+  bottom: 0;
 }
 </style>

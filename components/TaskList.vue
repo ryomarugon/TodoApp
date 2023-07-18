@@ -8,7 +8,7 @@
     <div class="card-columns">
       <draggable
         :list="tasks"
-        @update:list="tasks"
+        @update:list="updateTasks"
         item-key="no"
         :animation="700"
         group="taskGroup"
@@ -78,6 +78,11 @@ export default {
     filteredTasks: {
       type: Array,
       required: true,
+    },
+  },
+  methods: {
+    updateTasks(newList) {
+      this.$emit("update:filteredTasks", newList);
     },
   },
 };

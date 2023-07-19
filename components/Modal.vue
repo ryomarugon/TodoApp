@@ -1,8 +1,8 @@
 <template>
-  <div class="modal">
-    <div class="modal-wrap" ref="modalWrap">
-      <h3 class="text-lg">タスクの追加</h3>
-      <div>
+  <div class="modal_el">
+    <div class="modal_wrap" ref="modalWrap">
+      <h3>タスクの追加</h3>
+      <div class="add_task_el">
         <input
           class="input_contents input_task"
           v-model="form.task"
@@ -16,6 +16,9 @@
             {{ addTagButtonText }}</button
           ><br />
         </div>
+        <ul class="checked_tags">
+          <li v-for="tag in selectedTags" :key="tag">{{ tag }}</li>
+        </ul>
         <div v-if="inputTagForm" class="input_contents input_tag">
           <div
             class="select_tag"
@@ -25,6 +28,7 @@
             name="tag"
             multiple
           >
+            <div class="all_tags">タグ一覧</div>
             <div
               v-for="option in addTagHistory"
               :value="option"
@@ -36,18 +40,22 @@
             </div>
           </div>
           <br />
-          <input
-            type="text"
-            v-model="newTag"
-            name="tag"
-            placeholder="新しいタグを入力"
-          />
-          <button @click="createTag($event)">作成</button>
+          <div class="create_tag_el">
+            <input
+              type="text"
+              v-model="newTag"
+              name="tag"
+              placeholder="新しいタグを入力"
+            />
+            <button class="create_tag_btn" @click="createTag($event)">
+              作成
+            </button>
+          </div>
           <p class="error_same_tag">{{ sameTagError }}</p>
         </div>
-        <div class="input_contents">
-          <button @click="closeModal">キャンセル</button>
-          <button @click="handleSubmit">追加</button>
+        <div class="input_contents btn_group">
+          <button class="cancel_btn" @click="closeModal">キャンセル</button>
+          <button class="add_task_btn" @click="handleSubmit">追加</button>
         </div>
       </div>
     </div>
@@ -90,7 +98,6 @@ export default {
       selectTagList: false,
       newTag: "", // Data property for restore new tag
       selectedTags: [],
-      TagHistory_exceptUnselected: [],
       addTagButtonText: "+",
       sameTagError: "",
     };
@@ -100,14 +107,7 @@ export default {
       return this.tagHistory.filter((tag) => tag !== "未選択");
     },
   },
-  mounted() {
-    // Add addEventListener to outside elements of modal-wrap
-    document.addEventListener("click", this.handleOutsideClick);
-  },
-  beforeUnmount() {
-    // クリックイベントリスナーを解除
-    document.removeEventListener("click", this.handleOutsideClick);
-  },
+
   watch: {
     tagHistory: {
       handler(newVal) {
@@ -168,7 +168,7 @@ export default {
       }
     },
 
-    // If user clicks modal oudside modal-wrap, closeModal function will be called
+    // If user clicks modal oudside modal_wrap, closeModal function will be called
     handleOutsideClick(event) {
       if (
         this.showModal == true &&
@@ -181,11 +181,19 @@ export default {
       this.$emit("closeModal");
     },
   },
+  mounted() {
+    // Add addEventListener to outside elements of modal_wrap
+    document.addEventListener("click", this.handleOutsideClick);
+  },
+  beforeUnmount() {
+    // クリックイベントリスナーを解除
+    document.removeEventListener("click", this.handleOutsideClick);
+  },
 };
 </script>
 
 <style scoped>
-.modal {
+.modal_el {
   position: fixed;
   top: 0;
   width: 100%;
@@ -193,26 +201,62 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
 }
-.modal-wrap {
+.modal_wrap {
   padding: 20px;
   position: absolute;
   background-color: white;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  height: 40vh;
-  width: 50vw;
+  height: 60vh;
+  width: 35vw;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: space-evenly; */
   align-items: center;
+}
+.add_task_el {
+  height: 270px;
 }
 .input_contents {
   margin-bottom: 10px;
 }
+.input_task {
+  width: 315px;
+}
+.checked_tags {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+li {
+  background-color: olive;
+  color: white;
+  margin: 5px 5px 5px 0;
+  white-space: nowrap;
+}
+p,
+ul {
+  font-size: 14px;
+}
+
+.input_tag {
+  position: absolute;
+  height: 70%;
+}
+.all_tags {
+  text-align: center;
+  color: white;
+  background-color: black;
+  position: sticky;
+  top: 0;
+}
 .select_tag {
-  width: 150px;
-  height: 75px;
+  width: 170px;
+  height: 170px;
   border: 1px solid black;
   overflow: auto;
 }
@@ -233,5 +277,22 @@ export default {
 }
 .add_tag_button:active {
   background-color: rgba(0, 0, 0, 0.5);
+}
+.btn_group {
+  display: flex;
+  gap: 5px;
+  position: absolute;
+  bottom: 20px;
+}
+.create_tag_el {
+  display: flex;
+  gap: 5px;
+  position: relative;
+  /* margin-top: 5px; */
+}
+.create_tag_btn,
+.add_task_btn {
+  color: white;
+  background-color: black;
 }
 </style>

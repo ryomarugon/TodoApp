@@ -1,14 +1,12 @@
 <template>
-  <div
-    class="task-list"
-    v-if="filteredTasks === tasks || filteredTasks.includes('未選択')">
+  <div class="task-list" v-if="isFiltering">
     <h2>
-      {{ status }}<span class="task-count">{{ tasks.length }}</span>
+      {{ status }}<span class="task-count">{{ filteredTasks.length }}</span>
     </h2>
     <div class="card-columns">
-      <draggable
-        :list="tasks"
-        @update:list="updateTasks"
+      <!-- <draggable
+        :list="filteredTasks"
+        @update:list="updateFilteredTasks"
         item-key="no"
         :animation="700"
         group="taskGroup"
@@ -26,17 +24,29 @@
             </div>
           </div>
         </template>
-      </draggable>
+      </draggable> -->
+      <div v-for="task in filteredTasks" :key="task.id">
+        <div class="task-item">
+          <div>
+            <p>{{ task.name }}</p>
+            <ul class="tag-list">
+              <li v-for="tagItem in task.tags" :key="tagItem">
+                {{ tagItem }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div v-else class="task-list">
     <h2>
-      {{ status }}<span class="task-count">{{ filteredTasks.length }}</span>
+      {{ status }}<span class="task-count">{{ tasks.length }}</span>
     </h2>
     <div class="card-columns">
       <draggable
-        :list="filteredTasks"
-        @update:list="filteredTasks"
+        :list="tasks"
+        @update:list="updateTasks"
         item-key="no"
         :animation="700"
         group="taskGroup"
@@ -79,10 +89,17 @@ export default {
       type: Array,
       required: true,
     },
+    isFiltering: {
+      type: Boolean,
+      required: true,
+    },
   },
   methods: {
+    // updateFilteredTasks(newList) {
+    //   this.$emit("update:filteredTasks", newList.slice());
+    // },
     updateTasks(newList) {
-      this.$emit("update:filteredTasks", newList);
+      this.$emit("update:tasks", newList.slice());
     },
   },
 };

@@ -18,6 +18,8 @@
             :status="statusList[index]"
             :tasks="tasks_group[index]"
             :filteredTasks="filteredTasks[index]"
+            :isFiltering="isFiltering"
+            @update:tasks="updateTasks(index, $event)"
           />
         </div>
       </div>
@@ -70,24 +72,37 @@ export default {
           { name: "test2", tags: ["tag3", "tag4"] },
         ],
       ],
+      isFiltering: false,
+      filteredTags: [],
       filteredTasks: [],
       selectedStatus: "",
       tagHistory: ["tag1", "tag2", "tag3", "tag4"],
+      modalTask: null,
     };
   },
   methods: {
     filterTags(filteredTags) {
       console.log("selected tags: ", filteredTags);
       if (filteredTags.length === 0 || filteredTags.includes("未選択")) {
-        this.filteredTasks = this.tasks_group;
-        console.log(this.filteredTasks);
+        this.isFiltering = false;
+        console.log(this.tasks_group);
+        console.log(this.filteredTags);
+        console.log(this.isFiltering);
       } else {
+        this.isFiltering = true;
+        console.log(this.isFiltering);
         this.filteredTasks = this.tasks_group.map((tasks) =>
           tasks.filter((task) => {
             return filteredTags.every((tag) => task.tags.includes(tag));
           })
         );
         console.log(this.filteredTasks);
+      }
+      this.filteredTags = filteredTags;
+      if (this.showModal) {
+        const index = this.taskIndex;
+        this.addTask(this.filteredTags, index);
+        this.closeModal();
       }
     },
     openModal(status, index) {
@@ -99,14 +114,24 @@ export default {
     },
     // There is $emit element in handleSubmit function of Modal component
     addTask(task, index) {
-      console.log(task.tags);
+      // console.log(task.tags);
       this.tasks_group[index].unshift(task);
+      console.log(this.filteredTags);
+      if (this.filteredTags.every((tag) => task.tags.includes(tag))) {
+        this.filteredTasks[index].unshift(task);
+      }
       console.log(this.tasks_group);
     },
     closeModal() {
       this.showModal = false;
       this.selectedStatus = "";
     },
+    updateTasks(index, newList) {
+      this.$set(this.tasks_group, index, newList);
+    },
+    // updateFilteredTasks(index, newList) {
+    //   this.$set(this.filteredTasks, index, newList);
+    // },
   },
   created() {
     //Set filteredTasks when it was reset

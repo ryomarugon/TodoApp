@@ -33,7 +33,7 @@
               v-for="option in addTagHistory"
               :value="option"
               :key="option"
-              @click="toggleAddTag(option)"
+              @click.stop="toggleAddTag(option)"
             >
               {{ option }}
               <span v-if="isSelected(option)">✔︎</span>

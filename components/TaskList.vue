@@ -129,7 +129,7 @@ button {
   flex-wrap: wrap;
 }
 li {
-  background-color: olive;
+  background-color: #A1AF2F;
   color: white;
   margin: 5px 5px 0 0;
   white-space: nowrap;

@@ -10,16 +10,23 @@
       </div>
       <div class="task_list_row">
         <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
-          <h2 v-if="isFiltering">
-            {{ tasks_status[index] }}
-            {{ statusList[index] }}
-            <span class="task_count">{{ filteredTasks[index].length }}</span>
-          </h2>
-          <h2 v-else>
-            {{ tasks_status[index] }}
-            {{ statusList[index]
-            }}<span class="task_count">{{ tasks.length }}</span>
-          </h2>
+          <div class="status_el">
+            <div
+              class="task_status_mark"
+              :style="{ background: roundColor(index) }"
+            >
+              {{ tasks_status_mark[index] }}
+            </div>
+            <h2 v-if="isFiltering">
+              {{ statusList[index] }}
+              <span class="task_count">{{ filteredTasks[index].length }}</span>
+            </h2>
+            <h2 v-else>
+              {{ statusList[index]
+              }}<span class="task_count">{{ tasks.length }}</span>
+            </h2>
+          </div>
+
           <TaskList
             :status="statusList[index]"
             :tasks="tasks_group[index]"
@@ -60,7 +67,7 @@ export default {
     return {
       status: "",
       taskIndex: "",
-      tasks_status: ["🔴", "🔵", "🟢", "🟡"],
+      tasks_status_mark: [],
       statusList: ["未対応", "処理中", "レビュー中", "完了"],
       showModal: false,
       tasks_group: [
@@ -89,6 +96,13 @@ export default {
       tagHistory: ["tag1", "tag2", "tag3", "tag4"],
       modalTask: null,
     };
+  },
+  computed: {
+    // Use a computed property to calculate the roundColor based on tasks_status_mark
+    roundColor() {
+      const taskStatusColors = ["#ED8077", "#4487C5", "#5EB5A6", "#A1AF2F"];
+      return (index) => taskStatusColors[index];
+    },
   },
   methods: {
     openModal(status, index) {
@@ -158,7 +172,6 @@ export default {
   height: 100vh;
   display: flex;
   flex-direction: column;
-
   flex-grow: 1;
 }
 
@@ -183,6 +196,18 @@ export default {
   flex: 0 0 250px;
   width: 250px;
   overflow: auto;
+}
+.status_el{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task_status_mark {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
 }
 
 .task_count {

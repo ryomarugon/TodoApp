@@ -230,7 +230,7 @@ export default {
   margin-bottom: 10px;
 }
 li {
-  background-color: olive;
+  background-color: #A1AF2F;
   color: white;
   margin: 5px 5px 5px 0;
   white-space: nowrap;

@@ -18,9 +18,6 @@ export default {
     TaskList,
     Modal,
   },
-  data() {
-    return {};
-  },
 };
 </script>
 

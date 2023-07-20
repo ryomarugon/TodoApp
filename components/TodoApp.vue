@@ -163,7 +163,6 @@ export default {
 
 <style scoped>
 .container {
-  padding: 20px;
   width: 90%;
   margin: 0 auto;
 }

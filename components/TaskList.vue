@@ -1,22 +1,72 @@
 <template>
-  <div class="task-list">
-    <h2>
-      {{ status }}<span class="task-count">{{ tasks.length }}</span>
-    </h2>
-    <div class="card-columns">
-      <draggable
-        :list="tasks"
-        @update:list="tasks = $event"
+  <div class="task_list" v-if="isFiltering">
+    <div class="add_task_btn">
+      <button @click="openModal(status,index)">
+        +<span class="text-success">課題の追加</span>
+      </button>
+    </div>
+    <!-- <h2>
+      {{ status }}<span class="task-count">{{ filteredTasks.length }}</span>
+    </h2> -->
+    <div class="card_columns">
+      <!-- <draggable
+        :list="filteredTasks"
+        @update:list="updateFilteredTasks"
         item-key="no"
         :animation="700"
         group="taskGroup"
         class="tasks-box"
       >
         <template #item="{ element }">
-          <div class="task-item">
+          <div class="task_item">
             <div>
               <p>{{ element.name }}</p>
-              <ul class="tag-list">
+              <ul class="tag_list">
+                <li v-for="tagItem in element.tags" :key="tagItem">
+                  {{ tagItem }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </template>
+      </draggable> -->
+      <div v-for="task in filteredTasks" :key="task.id">
+        <div class="task_item">
+          <div>
+            <p>{{ task.name }}</p>
+            <ul class="tag_list">
+              <li v-for="tagItem in task.tags" :key="tagItem">
+                {{ tagItem }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div v-else class="task_list">
+    <div class="add_task_btn">
+      <button @click="openModal(status,index)">
+        +<span class="text-success">課題の追加</span>
+      </button>
+    </div>
+    <!-- <h2>
+      {{ status }}<span class="task-count">{{ tasks.length }}</span>
+    </h2> -->
+    <div class="card_columns">
+      <draggable
+        :list="tasks"
+        @@updateTasks="updateTasks"
+        item-key="no"
+        :animation="700"
+        group="taskGroup"
+        class="tasks-box"
+      >
+        <template #item="{ element }">
+          <div class="task_item">
+            <div>
+              <p>{{ element.name }}</p>
+              <ul class="tag_list">
                 <li v-for="tagItem in element.tags" :key="tagItem">
                   {{ tagItem }}
                 </li>
@@ -45,51 +95,74 @@ export default {
       type: Array,
       required: true,
     },
+    filteredTasks: {
+      type: Array,
+      required: true,
+    },
+    isFiltering: {
+      type: Boolean,
+      required: true,
+    },
+  },
+  methods: {
+    openModal(status,index) {
+      console.log(status);
+      this.$emit("openModal",status,index )
+      // event.stopPropagation();
+    },
+    // updateFilteredTasks(newList) {
+    //   this.$emit("update:filteredTasks", newList.slice());
+    // },
+    updateTasks(newList) {
+      this.$emit("update:tasks", newList.slice());
+    },
   },
 };
 </script>
 <style scoped>
-.task-list {
+.task_list {
   display: flex;
   flex-direction: column;
   background-color: white;
-  padding: 30px;
-  height: 70vh;
+  padding: 10px;
+  gap: 15px;
+  width: 230px;
+  height: 574px;
   overflow: auto;
 }
-.task-count {
-  border-radius: 35%;
-  width: 45px;
-  margin-left: 10px;
-  padding: 5px 10px;
-  font-size: 14px;
-  text-align: center;
-  height: 25px;
-  background-color: #d9d9d9;
+button {
+  background: none;
+  border: none;
 }
-.card-columns {
+.text-success {
+  color: green;
+}
+.card_columns {
   height: 90%;
 }
 .tasks-box {
   height: 100%;
 }
-.task-item {
+.task_item {
   background-color: white;
   min-height: 75px;
   border: 1px solid #ccc;
   padding: 5px;
   margin-bottom: 10px;
+  word-wrap: break-word;
 }
-.tag-list {
+.tag_list {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 li {
   background-color: olive;
   color: white;
-  margin-right: 5px;
+  margin: 5px 5px 0 0;
+  white-space: nowrap;
 }
 p,
 ul {

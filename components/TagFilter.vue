@@ -22,7 +22,6 @@
               placeholder="タグを検索…"
               @input="handleTagSearch"
             />
-            <!-- <div>未選択</div> -->
             <div
               class="tag_list"
               v-for="option in tagHistory"
@@ -118,42 +117,15 @@ export default {
       }
     },
     filterTags() {
-      // if (this.selectedTags === [] || this.selectedTags.includes("未選択")) {
       this.$emit("filterTags", this.filteredTags);
       this.showFilteringEl = !this.showFilteringEl;
-
-      // console.log(this.tasks);
-      // } else {
-      //   // console.log(this.tasks);
-      // const filteredTasks = this.tasks.filter((task) => {
-      //   console.log(task);
-      //   console.log(task.tags);
-      //   for (let i = 0; i < this.selectedTags.length; i++) {
-      //     if (!task.tags.includes(this.selectedTags[i])) {
-      //       return false;
-      //     }
-      //   }
-      //   return true;
-      // });
-      //   console.log(filteredTasks);
-      //   this.$emit("filterTags", filteredTasks);
     },
   },
-  // watch: {
-  //   filteredTags: {
-  //     handler() {
-  //       console.log("entered");
-  //       this.$emit("filterTags", this.filteredTags);
-  //     },
-  //     immediate: true,
-  //   },
-  // },
 };
 </script>
 <style scoped>
 .container {
   width: 100%;
-  /* height: 150px; */
 }
 
 .filtering_box {
@@ -175,7 +147,6 @@ export default {
   background-color: white;
   display: flex;
   flex-direction: column;
-  /* justify-content: space-between; */
   height: 135px;
   width: 100%;
   border: 1px solid black;

@@ -29,11 +29,9 @@ body {
   padding: 0;
   margin: 0;
   font-size: 14px;
-  width: 100vw;
 }
 
 .main_contents {
-  /* padding: 40px; */
   width: 100%;
   background-color: whitesmoke;
 }

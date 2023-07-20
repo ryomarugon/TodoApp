@@ -123,9 +123,6 @@ export default {
       this.addTagButtonText = this.addTagButtonText === "+" ? "−" : "+"; // Switch button text + and -
       this.inputTagForm = !this.inputTagForm;
       // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
-      // if (this.tagHistory.length > 0) {
-      //   this.selectTagList = true;
-      // }
     },
     createTag($event) {
       $event.preventDefault();

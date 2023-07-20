@@ -5,31 +5,8 @@
         +<span class="text-success">課題の追加</span>
       </button>
     </div>
-    <!-- <h2>
-      {{ status }}<span class="task-count">{{ filteredTasks.length }}</span>
-    </h2> -->
     <div class="card_columns">
-      <!-- <draggable
-        :list="filteredTasks"
-        @update:list="updateFilteredTasks"
-        item-key="no"
-        :animation="700"
-        group="taskGroup"
-        class="tasks-box"
-      >
-        <template #item="{ element }">
-          <div class="task_item">
-            <div>
-              <p>{{ element.name }}</p>
-              <ul class="tag_list">
-                <li v-for="tagItem in element.tags" :key="tagItem">
-                  {{ tagItem }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </template>
-      </draggable> -->
+      
       <div v-for="task in filteredTasks" :key="task.id">
         <div class="task_item">
           <div>
@@ -50,9 +27,6 @@
         +<span class="text-success">課題の追加</span>
       </button>
     </div>
-    <!-- <h2>
-      {{ status }}<span class="task-count">{{ tasks.length }}</span>
-    </h2> -->
     <div class="card_columns">
       <draggable
         :list="tasks"
@@ -108,11 +82,7 @@ export default {
     openModal(status,index) {
       console.log(status);
       this.$emit("openModal",status,index )
-      // event.stopPropagation();
     },
-    // updateFilteredTasks(newList) {
-    //   this.$emit("update:filteredTasks", newList.slice());
-    // },
     updateTasks(newList) {
       this.$emit("update:tasks", newList.slice());
     },

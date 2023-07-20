@@ -1,40 +1,42 @@
 <template>
   <div class="container">
-    <p>タグ</p>
-    <div class="filtering_box">
-      <div
-        class="selected_tags"
-        @click="showFilterTags($event)"
-        ref="selectedTags"
-      >
-        <p class="">▼</p>
-      </div>
-      <div
-        v-if="showFilteringEl"
-        class="show_filtering_el"
-        :style="{ width: getWidth }"
-      >
-        <div class="filtering_tags">
-          <input
-            type="text"
-            class="searching_tag"
-            placeholder="タグを検索…"
-            @input="handleTagSearch"
-          />
-          <!-- <div>未選択</div> -->
-          <div
-            class="tag_list"
-            v-for="option in tagHistory"
-            :value="option"
-            :key="option"
-            @click="toggleFilterTag(option)"
-            v-show="isTagVisible(option)"
-          >
-            {{ option }}
-            <span v-if="isSelected(option)">✔︎</span>
-          </div>
+    <div class="row">
+      <p>タグ</p>
+      <div class="filtering_box">
+        <div
+          class="selected_tags"
+          @click="showFilterTags($event)"
+          ref="selectedTags"
+        >
+          <p class="">▼</p>
         </div>
-        <div class="filtering_btn" @click="filterTags(option)">絞り込む</div>
+        <div
+          v-if="showFilteringEl"
+          class="show_filtering_el"
+          :style="{ width: getWidth }"
+        >
+          <div class="filtering_tags">
+            <input
+              type="text"
+              class="searching_tag"
+              placeholder="タグを検索…"
+              @input="handleTagSearch"
+            />
+            <!-- <div>未選択</div> -->
+            <div
+              class="tag_list"
+              v-for="option in tagHistory"
+              :value="option"
+              :key="option"
+              @click="toggleFilterTag(option)"
+              v-show="isTagVisible(option)"
+            >
+              {{ option }}
+              <span v-if="isSelected(option)">✔︎</span>
+            </div>
+          </div>
+          <div class="filtering_btn" @click="filterTags(option)">絞り込む</div>
+        </div>
       </div>
     </div>
   </div>

@@ -35,17 +35,17 @@
         </div>
       </div>
     </div>
-  </div>
-  <div class="modal">
-    <Modal
-      @closeModal="closeModal"
-      v-if="showModal"
-      :status="selectedStatus"
-      :index="taskIndex"
-      :tagHistory="tagHistory"
-      :showModal="true"
-      @addTask="addTask"
-    ></Modal>
+    <div class="modal">
+      <Modal
+        @closeModal="closeModal"
+        v-if="showModal"
+        :status="selectedStatus"
+        :index="taskIndex"
+        :tagHistory="tagHistory"
+        :showModal="true"
+        @addTask="addTask"
+      ></Modal>
+    </div>
   </div>
 </template>
 

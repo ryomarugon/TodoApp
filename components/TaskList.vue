@@ -10,7 +10,7 @@
       <div v-for="task in filteredTasks" :key="task.id">
         <div class="task_item">
           <div>
-            <p>{{ task.name }}</p>
+            <p class="task_name">{{ task.name }}</p>
             <ul class="tag_list">
               <li v-for="tagItem in task.tags" :key="tagItem">
                 {{ tagItem }}
@@ -39,7 +39,7 @@
         <template #item="{ element }">
           <div class="task_item">
             <div>
-              <p>{{ element.name }}</p>
+              <p class="task_name">{{ element.name }}</p>
               <ul class="tag_list">
                 <li v-for="tagItem in element.tags" :key="tagItem">
                   {{ tagItem }}
@@ -97,7 +97,7 @@ export default {
   padding: 10px;
   gap: 15px;
   width: 230px;
-  height: 574px;
+  height: 554px;
   overflow: auto;
 }
 button {
@@ -134,8 +134,5 @@ li {
   margin: 5px 5px 0 0;
   white-space: nowrap;
 }
-p,
-ul {
-  font-size: 14px;
-}
+
 </style>

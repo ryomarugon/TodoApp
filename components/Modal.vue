@@ -1,7 +1,7 @@
 <template>
   <div class="modal_el">
     <div class="modal_wrap" ref="modalWrap">
-      <h3>タスクの追加</h3>
+      <div class="modal_ttl">タスクの追加</div>
       <div class="add_task_el">
         <input
           class="input_contents input_task"
@@ -10,7 +10,7 @@
           name="task"
           placeholder="タスクを入力..."
           required
-        /><br />
+        />
         <div class="input_contents add_tag">
           タグ<button @click="addTag($event)" class="add_tag_button">
             {{ addTagButtonText }}</button
@@ -39,7 +39,6 @@
               <span v-if="isSelected(option)">✔︎</span>
             </div>
           </div>
-          <br />
           <div class="create_tag_el">
             <input
               type="text"
@@ -123,6 +122,9 @@ export default {
       this.addTagButtonText = this.addTagButtonText === "+" ? "−" : "+"; // Switch button text + and -
       this.inputTagForm = !this.inputTagForm;
       // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
+      if(this.sameTagError){
+        this.sameTagError="";
+      }
     },
     createTag($event) {
       $event.preventDefault();
@@ -193,47 +195,58 @@ export default {
 .modal_el {
   position: fixed;
   top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
 }
 .modal_wrap {
-  padding: 20px;
-  position: absolute;
+  max-width: 450px;
+  max-height: 522px;
+  min-height: 250px;
+  min-width: 330px;
+  padding: 40px 60px;
   background-color: white;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  height: 60vh;
-  width: 35vw;
-  display: flex;
-  flex-direction: column;
-  /* justify-content: space-evenly; */
-  align-items: center;
+  position: relative;
 }
 .add_task_el {
-  height: 270px;
+  display: flex;
+  flex-direction: column;
 }
-.input_contents {
-  margin-bottom: 10px;
+
+.modal_ttl {
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
 }
 .input_task {
-  width: 315px;
+  width: 100%;
+  height: 51px;
+  font-size: 20px;
 }
+
+.add_tag {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
 .checked_tags {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
-  margin-bottom: 10px;
 }
 li {
-  background-color: #A1AF2F;
+  background-color: #a1af2f;
   color: white;
+  padding: 0px 10px;
   margin: 5px 5px 5px 0;
   white-space: nowrap;
+  border-radius: 10px;
 }
 p,
 ul {
@@ -241,8 +254,8 @@ ul {
 }
 
 .input_tag {
-  position: absolute;
   height: 70%;
+  margin-bottom: 40px;
 }
 .all_tags {
   text-align: center;
@@ -276,16 +289,17 @@ ul {
   background-color: rgba(0, 0, 0, 0.5);
 }
 .btn_group {
+  font-size: 14px;
   display: flex;
   gap: 5px;
   position: absolute;
-  bottom: 20px;
+  bottom: 60px;
 }
 .create_tag_el {
+  margin-top: 5px;
   display: flex;
   gap: 5px;
   position: relative;
-  /* margin-top: 5px; */
 }
 .create_tag_btn,
 .add_task_btn {

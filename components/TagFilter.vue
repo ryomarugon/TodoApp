@@ -124,8 +124,11 @@ export default {
 };
 </script>
 <style scoped>
-.container {
+.container,.row {
   width: 100%;
+}
+.container{
+  height: 150px;
 }
 
 .filtering_box {

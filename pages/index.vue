@@ -1,3 +1,4 @@
+
 <template>
   <div class="container">
     <div class="header"><Header /></div>
@@ -18,21 +19,30 @@ export default {
     TaskList,
     Modal,
   },
-  data() {
-    return {};
-  },
 };
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 body {
   padding: 0;
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
 }
 
 .main_contents {
+  padding: 50px 0;
+  flex: 1;
   width: 100%;
+  min-height: 100vh;
   background-color: whitesmoke;
 }
 

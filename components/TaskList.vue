@@ -10,7 +10,7 @@
       <div v-for="task in filteredTasks" :key="task.id">
         <div class="task_item">
           <div>
-            <p>{{ task.name }}</p>
+            <p class="task_name">{{ task.name }}</p>
             <ul class="tag_list">
               <li v-for="tagItem in task.tags" :key="tagItem">
                 {{ tagItem }}
@@ -38,14 +38,14 @@
       >
         <template #item="{ element }">
           <div class="task_item">
-            <div>
-              <p>{{ element.name }}</p>
+            <!-- <div> -->
+              <p class="task_name">{{ element.name }}</p>
               <ul class="tag_list">
                 <li v-for="tagItem in element.tags" :key="tagItem">
                   {{ tagItem }}
                 </li>
               </ul>
-            </div>
+            <!-- </div> -->
           </div>
         </template>
       </draggable>
@@ -97,7 +97,7 @@ export default {
   padding: 10px;
   gap: 15px;
   width: 230px;
-  height: 574px;
+  height: 554px;
   overflow: auto;
 }
 button {
@@ -114,6 +114,9 @@ button {
   height: 100%;
 }
 .task_item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   background-color: white;
   min-height: 75px;
   border: 1px solid #ccc;
@@ -129,13 +132,13 @@ button {
   flex-wrap: wrap;
 }
 li {
-  background-color: olive;
+  background-color: #A1AF2F;
   color: white;
-  margin: 5px 5px 0 0;
+  margin-right: 5px;
+  margin-top: 5px;
   white-space: nowrap;
+  padding: 3px 10px;
+  border-radius: 10px;
 }
-p,
-ul {
-  font-size: 14px;
-}
+
 </style>

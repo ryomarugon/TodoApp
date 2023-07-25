@@ -10,16 +10,23 @@
       </div>
       <div class="task_list_row">
         <div class="col" v-for="(tasks, index) in tasks_group" :key="index">
-          <h2 v-if="isFiltering">
-            {{ tasks_status[index] }}
-            {{ statusList[index] }}
-            <span class="task_count">{{ filteredTasks[index].length }}</span>
-          </h2>
-          <h2 v-else>
-            {{ tasks_status[index] }}
-            {{ statusList[index]
-            }}<span class="task_count">{{ tasks.length }}</span>
-          </h2>
+          <div class="status_el">
+            <div
+              class="task_status_mark"
+              :style="{ background: roundColor(index) }"
+            >
+              {{ tasks_status_mark[index] }}
+            </div>
+            <h2 v-if="isFiltering">
+              {{ statusList[index] }}
+              <span class="task_count">{{ filteredTasks[index].length }}</span>
+            </h2>
+            <h2 v-else>
+              {{ statusList[index]
+              }}<span class="task_count">{{ tasks.length }}</span>
+            </h2>
+          </div>
+
           <TaskList
             :status="statusList[index]"
             :tasks="tasks_group[index]"
@@ -60,7 +67,7 @@ export default {
     return {
       status: "",
       taskIndex: "",
-      tasks_status: ["🔴", "🔵", "🟢", "🟡"],
+      tasks_status_mark: [],
       statusList: ["未対応", "処理中", "レビュー中", "完了"],
       showModal: false,
       tasks_group: [
@@ -89,6 +96,13 @@ export default {
       tagHistory: ["tag1", "tag2", "tag3", "tag4"],
       modalTask: null,
     };
+  },
+  computed: {
+    // Use a computed property to calculate the roundColor based on tasks_status_mark
+    roundColor() {
+      const taskStatusColors = ["#ED8077", "#4487C5", "#5EB5A6", "#A1AF2F"];
+      return (index) => taskStatusColors[index];
+    },
   },
   methods: {
     openModal(status, index) {
@@ -149,40 +163,55 @@ export default {
 
 <style scoped>
 .container {
-  padding: 20px;
-  width: 90%;
-  margin: 0 auto;
+  align-items: center;
+  height: 100%;
+  width: 100%;
 }
-
 .row {
-  height: 100vh;
+  width: 80%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-
-  flex-grow: 1;
+  gap: 20px;
 }
 
 .tag_filter {
   width: 150px;
+  height: 150px;
   gap: 0;
   z-index: 1;
 }
 
 .task_list_row {
-  flex: 1;
-  width: 100%;
   position: absolute;
+  max-width: 90%;
   display: flex;
-  margin-top: 100px;
+  margin: 100px 0;
   gap: 25px;
   z-index: 0;
-  overflow: auto;
+  overflow: hidden;
+  flex-grow: 1;
 }
 
 .col {
   flex: 0 0 250px;
   width: 250px;
-  overflow: auto;
+  height: 574px;
+}
+.status_el {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.task_status_mark {
+  display: block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+h2{
+  font-size:16px;
 }
 
 .task_count {
@@ -194,5 +223,8 @@ export default {
   text-align: center;
   height: 25px;
   background-color: #d9d9d9;
+}
+.modal {
+  width: 100vw;
 }
 </style>

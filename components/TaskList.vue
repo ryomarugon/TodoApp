@@ -38,14 +38,14 @@
       >
         <template #item="{ element }">
           <div class="task_item">
-            <div>
+            <!-- <div> -->
               <p class="task_name">{{ element.name }}</p>
               <ul class="tag_list">
                 <li v-for="tagItem in element.tags" :key="tagItem">
                   {{ tagItem }}
                 </li>
               </ul>
-            </div>
+            <!-- </div> -->
           </div>
         </template>
       </draggable>
@@ -114,6 +114,9 @@ button {
   height: 100%;
 }
 .task_item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
   background-color: white;
   min-height: 75px;
   border: 1px solid #ccc;
@@ -131,8 +134,11 @@ button {
 li {
   background-color: #A1AF2F;
   color: white;
-  margin: 5px 5px 0 0;
+  margin-right: 5px;
+  margin-top: 5px;
   white-space: nowrap;
+  padding: 3px 10px;
+  border-radius: 10px;
 }
 
 </style>

@@ -243,7 +243,7 @@ export default {
 li {
   background-color: #a1af2f;
   color: white;
-  padding: 0px 10px;
+  padding: 3px 10px;
   margin: 5px 5px 5px 0;
   white-space: nowrap;
   border-radius: 10px;

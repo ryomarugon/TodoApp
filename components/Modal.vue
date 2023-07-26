@@ -61,134 +61,130 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TaskList from "./TaskList.vue";
+import { ref, defineProps, defineEmits, computed, watch, onBeforeUnmount, onMounted } from "vue";
 
-export default {
-  components: {
-    TaskList,
+const props = defineProps({
+  status: {
+    type: String,
+    required: true,
   },
-  props: {
-    status: {
-      type: String,
-      required: true,
-    },
-    tagHistory: {
-      type: Array,
-      required: true,
-    },
-    index: {
-      type: Number,
-      required: true,
-    },
-    showModal: {
-      type: Boolean,
-      required: true,
-    },
+  tagHistory: {
+    type: Array,
+    required: true,
   },
-  data() {
-    return {
-      form: {
-        task: "",
-        tag: [],
-        status: this.status,
-      },
-      inputTagForm: false,
-      selectTagList: false,
-      newTag: "", // Data property for restore new tag
-      selectedTags: [],
-      addTagButtonText: "+",
-      sameTagError: "",
-    };
+  index: {
+    type: Number,
+    required: true,
   },
-  computed: {
-    addTagHistory() {
-      return this.tagHistory.filter((tag) => tag !== "未選択");
-    },
+  showModal: {
+    type: Boolean,
+    required: true,
   },
+});
 
-  watch: {
-    tagHistory: {
-      handler(newVal) {
-        this.selectTagList = newVal.length > 0;
-      },
-      immediate: true,
-    },
-  },
+const emit = defineEmits(["addTask", "closeModal"]);
 
-  methods: {
-    addTag($event) {
-      $event.preventDefault();
-      this.addTagButtonText = this.addTagButtonText === "+" ? "−" : "+"; // Switch button text + and -
-      this.inputTagForm = !this.inputTagForm;
-      // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
-      if(this.sameTagError){
-        this.sameTagError="";
-      }
-    },
-    createTag($event) {
-      $event.preventDefault();
-      if (!this.tagHistory.includes(this.newTag)) {
-        this.tagHistory.push(this.newTag);
-        console.log(this.tagHistory);
-        this.newTag = ""; // Reset the value of newTag input field
-        this.sameTagError = "";
-        this.selectTagList = true;
-      } else {
-        this.sameTagError = "既に登録されているタグです";
-        this.newTag = "";
-      }
-    },
-    toggleAddTag(tag) {
-      const index = this.selectedTags.indexOf(tag);
-      console.log(index);
-      if (index !== -1) {
-        this.selectedTags.splice(index, 1); // Remove checked tags from selectTags Array
-      } else {
-        this.selectedTags.push(tag); // Add checked tags to selectTags Array
-      }
-    },
-    isSelected(tag) {
-      if (this.inputTagForm === true) {
-        return this.selectedTags.includes(tag);
-      }
-    },
-
-    handleSubmit() {
-      const formData = {
-        name: this.form.task,
-        tags: this.selectedTags,
-      };
-
-      // it means name of formData(input name:task) is required element
-      if (formData.name !== "") {
-        this.$emit("addTask", formData, this.index);
-        this.$emit("closeModal");
-      }
-    },
-
-    // If user clicks modal oudside modal_wrap, closeModal function will be called
-    handleOutsideClick(event) {
-      if (
-        this.showModal == true &&
-        !this.$refs.modalWrap.contains(event.target)
-      ) {
-        this.closeModal();
-      }
-    },
-    closeModal() {
-      this.$emit("closeModal");
-    },
-  },
-  mounted() {
-    // Add addEventListener to outside elements of modal_wrap
-    document.addEventListener("click", this.handleOutsideClick);
-  },
-  beforeUnmount() {
-    // クリックイベントリスナーを解除
-    document.removeEventListener("click", this.handleOutsideClick);
-  },
+const form = {
+  task: "",
+  tag: [],
+  status: props.status.value,
 };
+
+const inputTagForm = ref(false);
+const selectTagList = ref(false);
+const newTag = ref(""); // Data property for restore new tag
+const selectedTags = ref([]);
+const addTagButtonText = ref("+");
+const sameTagError = ref("");
+
+//computed
+const addTagHistory =  computed(() => {
+  return props.tagHistory.filter((tag) => tag !== "未選択");
+});
+
+watch(
+  props.tagHistory,
+  (newVal) => {
+    selectTagList.value = newVal.length > 0;
+  },
+  {
+    immediate: true,
+  }
+);
+
+function addTag($event) {
+  $event.preventDefault();
+  addTagButtonText.value = addTagButtonText.value === "+" ? "−" : "+"; // Switch button text + and -
+  inputTagForm.value = !inputTagForm.value;
+  // Switch display and hiden inputTagform element(including select box and input tag to create newTag)
+  if (sameTagError.value) {
+    sameTagError.value = "";
+  }
+}
+function createTag($event) {
+  $event.preventDefault();
+  if (!props.tagHistory.includes(this.newTag)) {
+    props.tagHistory.push(this.newTag);
+    console.log(props.tagHistory);
+    newTag.value = ""; // Reset the value of newTag input field
+    sameTagError.value = "";
+    selectTagList.value = true;
+  } else {
+    sameTagError.value = "既に登録されているタグです";
+    newTag.value = "";
+  }
+}
+function toggleAddTag(tag) {
+  const index = selectedTags.value.indexOf(tag);
+  console.log(index);
+  if (index !== -1) {
+    selectedTags.value.splice(index, 1); // Remove checked tags from selectTags Array
+  } else {
+    selectedTags.value.push(tag); // Add checked tags to selectTags Array
+  }
+}
+function isSelected(tag) {
+  if (inputTagForm.value === true) {
+    return selectedTags.value.includes(tag);
+  }
+}
+
+function handleSubmit() {
+  const formData = {
+    name: form.task,
+    tags: selectedTags.value,
+  };
+
+  // it means name of formData(input name:task) is required element
+  if (formData.name !== "") {
+    emit("addTask", formData, props.index);
+    emit("closeModal");
+  }
+}
+
+const modalWrap= ref(null);
+
+// If user clicks modal oudside modal_wrap, closeModal function will be called
+function handleOutsideClick(event) {
+  if (props.showModal == true && !modalWrap.value.contains(event.target)) {
+    closeModal();
+  }
+}
+function closeModal() {
+  emit("closeModal");
+}
+
+onMounted(()=>{
+  // Add addEventListener to outside elements of modal_wrap
+  document.addEventListener("click", handleOutsideClick);
+});
+
+onBeforeUnmount(()=> {
+  // クリックイベントリスナーを解除
+  document.removeEventListener("click", handleOutsideClick);
+});
 </script>
 
 <style scoped>

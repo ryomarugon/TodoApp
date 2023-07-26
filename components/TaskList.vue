@@ -53,14 +53,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import draggable from "vuedraggable";
+import { defineProps, defineEmits } from 'vue';
 
-export default {
-  components: {
-    draggable,
-  },
-  props: {
+//props
+const props = defineProps({
     status: {
       type: String,
       required: true,
@@ -76,18 +74,19 @@ export default {
     isFiltering: {
       type: Boolean,
       required: true,
-    },
-  },
-  methods: {
-    openModal(status,index) {
-      console.log(status);
-      this.$emit("openModal",status,index )
-    },
-    updateTasks(newList) {
-      this.$emit("update:tasks", newList.slice());
-    },
-  },
-};
+    }});
+
+//emit
+const emit = defineEmits(['openModal', 'updateTasks']);
+
+//method
+function openModal(status,index) {
+      emit("openModal", status,index );
+    };
+    function updateTasks(newList) {
+      emit("updateTasks", newList.slice());
+    };
+  
 </script>
 <style scoped>
 .task_list {

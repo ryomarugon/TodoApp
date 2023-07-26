@@ -13,7 +13,7 @@
           <div class="status_el">
             <div
               class="task_status_mark"
-              :style="{ background: roundColor(index) }"
+              :style="{ background: taskStatusColors[index] }"
             >
               {{ tasks_status_mark[index] }}
             </div>
@@ -52,113 +52,102 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import TagFilter from "./TagFilter.vue";
 import TaskList from "./TaskList.vue";
 import Modal from "./Modal.vue";
+import { ref, computed, reactive } from "vue";
 
-export default {
-  components: {
-    TagFilter,
-    TaskList,
-    Modal,
-  },
-  data() {
-    return {
-      status: "",
-      taskIndex: "",
-      tasks_status_mark: [],
-      statusList: ["未対応", "処理中", "レビュー中", "完了"],
-      showModal: false,
-      tasks_group: [
-        // dummy data for demonstrating draggable tags
-        [
-          { name: "test", tags: ["tag1", "tag2"] },
-          { name: "test2", tags: ["tag3", "tag4"] },
-        ],
-        [
-          { name: "test", tags: ["tag1", "tag2"] },
-          { name: "test2", tags: ["tag3", "tag4"] },
-        ],
-        [
-          { name: "test", tags: ["tag1", "tag2"] },
-          { name: "test2", tags: ["tag3", "tag4"] },
-        ],
-        [
-          { name: "test", tags: ["tag1", "tag2"] },
-          { name: "test2", tags: ["tag3", "tag4"] },
-        ],
-      ],
-      isFiltering: false,
-      filteredTags: [],
-      filteredTasks: [],
-      selectedStatus: "",
-      tagHistory: ["tag1", "tag2", "tag3", "tag4"],
-      modalTask: null,
-    };
-  },
-  computed: {
-    // Use a computed property to calculate the roundColor based on tasks_status_mark
-    roundColor() {
-      const taskStatusColors = ["#ED8077", "#4487C5", "#5EB5A6", "#A1AF2F"];
-      return (index) => taskStatusColors[index];
-    },
-  },
-  methods: {
-    openModal(status, index) {
-      this.taskIndex = index;
-      this.selectedStatus = status;
-      this.showModal = true;
-      event.stopPropagation();
-    },
-    filterTags(filteredTags) {
-      console.log("selected tags: ", filteredTags);
-      if (filteredTags.length === 0 || filteredTags.includes("未選択")) {
-        this.isFiltering = false;
-        console.log(this.tasks_group);
-        console.log(this.filteredTags);
-        console.log(this.isFiltering);
-      } else {
-        this.isFiltering = true;
-        console.log(this.isFiltering);
-        this.filteredTasks = this.tasks_group.map((tasks) =>
-          tasks.filter((task) => {
-            return filteredTags.every((tag) => task.tags.includes(tag));
-          })
-        );
-        console.log(this.filteredTasks);
-      }
-      this.filteredTags = filteredTags;
-      if (this.showModal) {
-        const index = this.taskIndex;
-        this.addTask(this.filteredTags, index);
-        this.closeModal();
-      }
-    },
-    // There is $emit element in handleSubmit function of Modal component
-    addTask(task, index) {
-      // console.log(task.tags);
-      this.tasks_group[index].unshift(task);
-      console.log(this.filteredTags);
-      if (this.filteredTags.every((tag) => task.tags.includes(tag))) {
-        this.filteredTasks[index].unshift(task);
-      }
-      console.log(this.tasks_group);
-    },
-    closeModal() {
-      this.showModal = false;
-      this.selectedStatus = "";
-    },
-    updateTasks(index, newList) {
-      this.$set(this.tasks_group, index, newList);
-    },
-  },
-  created() {
-    //Set filteredTasks when it was reset
-    this.filteredTasks = this.tasks_group.map((tasks) => tasks.slice());
-    console.log(this.filteredTasks);
-  },
-};
+const status = ref("");
+const taskIndex = ref("");
+const tasks_status_mark = ref([]);
+const statusList = ["未対応", "処理中", "レビュー中", "完了"];
+const showModal = ref(false);
+const tasks_group = reactive([
+  // dummy data for demonstrating draggable tags
+  [
+    { name: "test", tags: ["tag1", "tag2"] },
+    { name: "test2", tags: ["tag3", "tag4"] },
+  ],
+  [
+    { name: "test", tags: ["tag1", "tag2"] },
+    { name: "test2", tags: ["tag3", "tag4"] },
+  ],
+  [
+    { name: "test", tags: ["tag1", "tag2"] },
+    { name: "test2", tags: ["tag3", "tag4"] },
+  ],
+  [
+    { name: "test", tags: ["tag1", "tag2"] },
+    { name: "test2", tags: ["tag3", "tag4"] },
+  ],
+]);
+const isFiltering = ref(false);
+const filteredTags = ref([]);
+const filteredTasks = ref([]);
+const selectedStatus = ref("");
+const tagHistory = ref(["tag1", "tag2", "tag3", "tag4"]);
+const taskStatusColors = ["#ED8077", "#4487C5", "#5EB5A6", "#A1AF2F"];
+
+const roundColor = computed(() => {
+  // 現在のindexの値を取得するため、.valueを使う
+  const index = status.value;
+  return taskStatusColors[index];
+});
+//Set filteredTasks when it was reset
+filteredTasks.value = tasks_group.map((tasks) => tasks.slice());
+console.log(filteredTasks.value);
+
+function openModal(status, index) {
+  taskIndex.value = index;
+  selectedStatus.value = status;
+  showModal.value = true;
+  event.stopPropagation();
+}
+
+function filterTags(selectedTags) {
+  console.log("selected tags: ", selectedTags);
+  if (selectedTags.length === 0 || selectedTags.includes("未選択")) {
+    isFiltering.value = false;
+    console.log(tasks_group);
+    console.log(filteredTags);
+    console.log(isFiltering);
+  } else {
+    isFiltering.value = true;
+    console.log(isFiltering);
+    filteredTasks.value = tasks_group.map((tasks) =>
+      tasks.filter((task) => {
+        return selectedTags.every((tag) => task.tags.includes(tag));
+      })
+    );
+    console.log(filteredTasks);
+  }
+  filteredTags.value = selectedTags;
+  if (showModal.value) {
+    const index = taskIndex;
+    addTask(selectedTags.value, index);
+    closeModal();
+  }
+}
+
+// There is $emit element in handleSubmit function of Modal component
+function addTask(task, index) {
+  console.log(tasks_group[index]);
+  tasks_group[index].unshift(task);
+  console.log(filteredTags);
+  if (filteredTags.value.every((tag) => task.tags.includes(tag))) {
+    filteredTasks.value[index].unshift(task);
+  }
+}
+
+function closeModal() {
+  showModal.value = false;
+  selectedStatus.value = "";
+}
+function updateTasks(index, newList) {
+  tasks_group[index] = newList;
+  // this.$set(this.tasks_group, index, newList);
+}
 </script>
 
 <style scoped>
@@ -210,8 +199,8 @@ export default {
   height: 15px;
   border-radius: 50%;
 }
-h2{
-  font-size:16px;
+h2 {
+  font-size: 16px;
 }
 
 .task_count {
